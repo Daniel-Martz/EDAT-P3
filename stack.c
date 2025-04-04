@@ -40,35 +40,32 @@ Stack *stack_init()
 }
 
 void stack_free(Stack *s)
-{
-    int i;
-    if (s == NULL)
-    {
-        return;
+{    
+    if (s != NULL) {
+        if (s->item != NULL) {
+            free(s->item);
+        }
+        free((void*)s); 
     }
-    for (i = 0; i < s->capacity; i++)
-    {
-        free(s->item[i]);
-    }
-    free(s->item);
-    free(s);
 }
-
 
 Status stack_push(Stack *s, const void *ele) {
     int i;
+    int new_capacity = 0;
+    void **new_items = NULL;
+
     if (s == NULL || ele == NULL) {
         return ERROR;
     }
 
     if (s->top == s->capacity - 1) {
-        const size_t new_capacity = s->capacity * FCT_CAPACITY;
-        void **new_items = realloc(s->item, new_capacity * sizeof(void *));
+        new_capacity = s->capacity * FCT_CAPACITY;
+        new_items = realloc(s->item, new_capacity * sizeof(void *));
         
         if (new_items == NULL) {
             return ERROR; 
         }
-        
+
         for (i = s->capacity; i < new_capacity; i++) {
             new_items[i] = NULL;
         }
@@ -82,7 +79,6 @@ Status stack_push(Stack *s, const void *ele) {
     
     return OK;
 }
-
 
 void *stack_pop(Stack *s)
 {
@@ -131,10 +127,11 @@ size_t stack_size(const Stack *s)
 
 int stack_print(FILE *fp, const Stack *s, P_stack_ele_print f) {
     int total = 0;
-    if (!fp || !s || !f) return -1;
-    
+    int i;
 
-    for (int i = 0; i <= s->top; i++) {  
+    if (!fp || !s || !f) return -1;
+
+    for (i = 0; i <= s->top; i++) {  
         total += f(fp, s->item[i]);
     }
     

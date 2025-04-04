@@ -54,4 +54,6 @@ int main(int argc, char **argv){
 
     graph_free(graph);
     fclose(f);
+
+    return 0;
 }

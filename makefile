@@ -44,4 +44,8 @@ p3_e2b.o: p3_e2b.c graph.h vertex.h types.h
 clean:
 	rm -f $(OBJ_A) $(OBJ_B) $(OBJ_C) $(EJS)
 
-.PHONY: all clean
+runv: 
+	valgrind --leak-check=full ./p3_e2b city_graph.txt 100 700
+
+.PHONY: all clean runv
+
