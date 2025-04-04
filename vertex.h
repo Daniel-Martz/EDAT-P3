@@ -59,7 +59,7 @@ typedef struct _Vertex Vertex;
  * @return Return the initialized vertex if it was done correctly, 
  * otherwise return NULL.
 */
-Vertex * vertex_init ();
+Vertex * vertex_init (void);
 
 
 /**

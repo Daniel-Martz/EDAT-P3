@@ -21,7 +21,7 @@ typedef int (*p_queue_ele_print)(FILE *, const void *);
  *
  * @return A pointer to the queue if it could be created or NULL in case of error.
  *  */
-Queue *queue_new();
+Queue *queue_new(void);
 
 /**
  * @brief This function frees the memory used by the queue, but not the elements 

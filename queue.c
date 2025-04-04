@@ -16,7 +16,7 @@ struct _Queue{
     void **rear;
 };
 
-Queue *queue_new(){
+Queue *queue_new(void){
     Queue *q = NULL;
     int i;
 
@@ -59,7 +59,7 @@ Status queue_push(Queue *q, void *ele){
 
 void *queue_pop(Queue *q){
     void *ele = NULL;
-    if ((!q) || (queue_is_Empty(q) == TRUE)){
+    if ((!q) || (queue_isEmpty(q) == TRUE)){
         return NULL; 
     }
 
@@ -71,24 +71,22 @@ void *queue_pop(Queue *q){
 }
 
 void *queue_getFront(const Queue *q){
-    if ((!q) || (queue_is_empty(q) == TRUE)) {
+    if ((!q) || (queue_isEmpty(q) == TRUE)) {
         return NULL; 
     }
     return *(q->front); 
 }
 
 void *queue_getBack(const Queue *q){
-    void **last_elem;
-    if ((!q) || (queue_is_empty(q) == TRUE)) {
+    if ((!q) || (queue_isEmpty(q) == TRUE)) {
         return NULL; 
     }
     if (q->rear == q->data) {
-        last_elem = q->data + MAX_QUEUE - 1;
+        return (void*)*(q->data + MAX_QUEUE - 1);
     } 
     else {
-        last_elem = q->rear - 1; 
+        return (void*)*(q->rear - 1); 
     }
-    return *last_elem;
 }
 
 size_t queue_size(const Queue *q){
@@ -114,7 +112,6 @@ size_t queue_size(const Queue *q){
  * case of error it returns a negative value.
  *  */
 int queue_print(FILE *fp, const Queue *q, p_queue_ele_print f){
-    void *ele = NULL;
     int counter = 0;
     int i;
 
@@ -123,9 +120,7 @@ int queue_print(FILE *fp, const Queue *q, p_queue_ele_print f){
     }
     
     for(i=0; i<queue_size(q); i++){
-        ele = queue_pop(q);
-        counter += f(stdout, (void*)ele);
-        queue_push(q, (void*)ele);
+        counter += f(stdout, (void*) *(q->data + ((q->front +i -q->data) % MAX_QUEUE)));
     }
 
     return counter;

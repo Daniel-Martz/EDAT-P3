@@ -25,7 +25,7 @@ Status vertex_setField(Vertex *v, char *key, char *value) {
     return ERROR;
 }
 
-Vertex *vertex_init() {
+Vertex *vertex_init(void) {
     Vertex *v = NULL;
     if (!(v = (Vertex *)calloc(1, sizeof(Vertex)))) {
         return NULL;

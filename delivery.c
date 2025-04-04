@@ -155,6 +155,7 @@
    }
    fprintf(pf, "Running delivery plan for queue:\n");
    queue_print(pf, d->plan, fprint);
+   fprintf(pf, "\n");
  
    while (!queue_isEmpty(d->plan))
    {  
@@ -237,4 +238,5 @@
  
    return n;
  }
- 
+
+
