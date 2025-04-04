@@ -1,4 +1,5 @@
 #include "graph.h"
+#include "queue.h"
 #include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +16,7 @@ struct _Graph
     int num_edges;
 };
 
-Graph *graph_init()
+Graph *graph_init(void)
 {
     Graph *g = NULL;
     int i, j;
@@ -557,5 +558,77 @@ Status graph_depthSearch(Graph *g, long from_id, long to_id)
     }
 
     stack_free(stack);
+    return status;
+}
+
+Status graph_breathSearch(Graph *g, long from_id, long to_id)
+{
+    int i;
+    Queue *q = NULL;
+    Status status = OK;
+    Vertex *vf = NULL, *vt = NULL, *v_aux = NULL;
+    long *adjacent_ids = NULL;
+    int num_connections;
+
+    if (g == NULL || from_id <= 0 || to_id <= 0)
+    {
+        return ERROR;
+    }
+
+    for (i = 0; i < graph_getNumberOfVertices(g); i++)
+    {
+        vertex_setState(g->vertices[i], WHITE);
+    }
+
+    q = queue_new();
+    if (q == NULL)
+    {
+        return ERROR;
+    }
+
+    vf = graph_get_vertex_from_id(g, from_id);
+    vt = graph_get_vertex_from_id(g, to_id);
+
+    if (!vf || !vt)
+    {
+        queue_free(q);
+        return ERROR;
+    }
+    vertex_setState(vf, BLACK);
+
+    queue_push(q, vf);
+
+    while ((queue_isEmpty(q) == FALSE) && (status == OK))
+    {
+        v_aux = (Vertex *)queue_pop(q);
+        vertex_print(stdout, v_aux);
+        fprintf(stdout, "\n");
+
+        if (vertex_cmp(v_aux, vt) == 0)
+        {
+            queue_free(q);
+            return status;
+        }
+        else
+        {
+            if (!(adjacent_ids = graph_getConnectionsFromId(g, vertex_getId(v_aux))))
+            {
+                continue;
+            }
+
+            num_connections = graph_getNumberOfConnectionsFromId(g, vertex_getId(v_aux));
+            for (i = 0; i < num_connections; i++)
+            {
+                if (vertex_getState(graph_get_vertex_from_id(g, adjacent_ids[i])) == WHITE)
+                {
+                    vertex_setState(graph_get_vertex_from_id(g, adjacent_ids[i]), BLACK);
+                    queue_push(q, graph_get_vertex_from_id(g, adjacent_ids[i]));
+                }
+            }
+            free(adjacent_ids);
+        }
+    }
+
+    queue_free(q);
     return status;
 }

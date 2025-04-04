@@ -24,7 +24,7 @@ typedef struct _Graph Graph;
  * @return A pointer to the graph if it was correctly allocated, 
  * NULL otherwise.
  **/
-Graph * graph_init();
+Graph * graph_init(void);
 
 /**
  * @brief Frees a graph.
@@ -224,6 +224,8 @@ Status graph_depthSearch (Graph *g, long from_id, long to_id);
 Vertex *graph_get_vertex_from_index(Graph *graph, int index);
 
 Vertex *graph_get_vertex_from_id(Graph *g, long id);
+
+Status graph_breathSearch(Graph *g, long from_id, long to_id);
 
 
 #endif /* GRAPH_H */

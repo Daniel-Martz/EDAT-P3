@@ -81,7 +81,6 @@ Delivery *build_delivery(FILE *pf)
 int main(int argc, char **argv)
 {
    Delivery *delivery = NULL;
-   char filename[SIZE];
    FILE *f = NULL;
 
    if (argc < 2)
@@ -90,9 +89,7 @@ int main(int argc, char **argv)
       return -1;
    }
 
-   strcpy(filename, argv[1]);
-
-   if (!(f = fopen(filename, "r")))
+   if (!(f = fopen(argv[1], "r")))
    {
       return -1;
    }

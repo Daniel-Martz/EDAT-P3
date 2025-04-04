@@ -51,8 +51,8 @@ Status queue_push(Queue *q, void *ele){
     if((!q) || (!ele) || (queue_is_full(q) == TRUE)){
         return ERROR;
     }
-    *(q->rear) = (void *)ele;
-    q->rear = q->data + (q->rear + 1 - q->data) % MAX_QUEUE;
+    *(q->rear) = ele;
+    q->rear = q->data + ((q->rear + 1 - q->data) % MAX_QUEUE);
 
     return OK;
 }
@@ -64,10 +64,9 @@ void *queue_pop(Queue *q){
     }
 
     ele = *(q->front);
-    *(q->front) = NULL;
-    q->front = q->data + (q->front + 1 - q->data) % MAX_QUEUE;
+    q->front = q->data + ((q->front + 1 - q->data) % MAX_QUEUE);
 
-    return ele;
+    return (void*)ele;
 }
 
 void *queue_getFront(const Queue *q){
