@@ -14,7 +14,7 @@ struct _Stack
 };
 
 
-Stack *stack_init()
+Stack *stack_init(void)
 {
     Stack *s = NULL;
     int i = 0;

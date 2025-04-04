@@ -40,7 +40,7 @@ typedef int (*P_stack_ele_cmp)(const void *, const void *);
  * @return   This function returns a pointer to the stack or a null pointer
  * if insufficient memory is available to create the stack.
  *  */
-Stack * stack_init ();
+Stack * stack_init (void);
 
 /**
  * @brief  This function frees the memory used by the stack.
