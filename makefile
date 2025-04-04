@@ -42,6 +42,6 @@ p3_e2b.o: p3_e2b.c graph.h vertex.h types.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(OBJ_A) $(OBJ_B) $(EJS)
+	rm -f $(OBJ_A) $(OBJ_B) $(OBJ_C) $(EJS)
 
 .PHONY: all clean
