@@ -24,7 +24,10 @@
 #ifndef LIST_H
 #define	LIST_H
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "types.h"
+#include "file_utils.h"
 
 /**
  * List type definition: a list of arbitrary elements.

@@ -36,7 +36,7 @@ int main(int argc, char **argv){
     fprintf(stdout, "Input graph:\n");
     graph_print(stdout, graph);
 
-    fprintf(stdout, "--------DFS------------");
+    fprintf(stdout, "--------DFS------------\n");
     fprintf(stdout, "From Vertex id: %ld\n",from);
     fprintf(stdout, "To Vertex id: %ld\n",to);
     fprintf(stdout, "Output:\n");
@@ -44,7 +44,7 @@ int main(int argc, char **argv){
         return -1;
     }
 
-    fprintf(stdout, "--------BFS------------");
+    fprintf(stdout, "--------BFS------------\n");
     fprintf(stdout, "From Vertex id: %ld\n",from);
     fprintf(stdout, "To Vertex id: %ld\n",to);
     fprintf(stdout, "Output:\n");

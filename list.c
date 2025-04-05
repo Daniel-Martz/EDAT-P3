@@ -14,6 +14,7 @@ struct _List
     NodeList *last;
 };
 
+/* PRIVATE FUNCTIONS*/
 NodeList *node_new()
 {
     NodeList *n = NULL;
@@ -27,13 +28,7 @@ NodeList *node_new()
     n->next = NULL;
     return n;
 }
-
-void node_free(NodeList *n)
-{
-    if (n == NULL)
-        return;
-    free(n);
-}
+/************************************/
 
 List *list_new()
 {
@@ -77,12 +72,11 @@ Status list_pushFront(List *pl, void *e)
 
     n->data = (void *)e;
 
-    if (list_isEmpty(pl))
+    if (list_isEmpty(pl) == TRUE)
     {
         n->next = n;
         pl->last = n;
     }
-
     else
     {
         n->next = pl->last->next;
@@ -119,33 +113,58 @@ Status list_pushBack(List *pl, void *e)
     return OK;
 }
 
-/**
- * @brief Public function that pushes an element into an ordered list.
- *
- * Inserts in its position a reference of the element received as argument.
- *
- * Note that it is necessary to traverse the list in order to obtain the
- * insert position, so this operation is linear in the number of List elements.
- *
- * @param pl Pointer to the List.
- * @param e Pointer to the element to be inserted into the List.
- * @param f A pointer to the function that must be used to compare the elements.
- * @param order Must takes a positive value for a crescent list and negative
- *  value for decrescent list.
- *
- * @return Status value OK if the insertion could be done, Status value ERROR
- * otherwise.
- */
 Status list_pushInOrder(List *pl, void *e, P_ele_cmp f, int order)
 {
-    NodeList *new_node = NULL, *prev = NULL, *current = NULL;
 
-    if (pl == NULL || e == NULL || f == NULL || order > list_size(pl) || -order>list_size(pl))
+    NodeList *current = NULL;
+    void *temp;
+
+    if (pl == NULL || e == NULL || f == NULL || order == 0)
     {
         return ERROR;
     }
 
+    list_pushFront(pl, e);
 
+    if (order > 0)
+    {
+        current = pl->last->next;
+        while (current != pl->last)
+        {
+            if (f(current->data, current->next->data) > 0)
+            {
+                temp = current->data;
+                current->data = current->next->data;
+                current->next->data = temp;
+
+                current = pl->last->next;
+            }
+            else
+            {
+                current = current->next;
+            }
+        }
+    }
+    else
+    {
+        current = pl->last->next;
+        while (current != pl->last)
+        {
+            if (f(current->data, current->next->data) < 0)
+            {
+                temp = current->data;
+                current->data = current->next->data;
+                current->next->data = temp;
+
+                current = pl->last->next;
+            }
+            else
+            {
+                current = current->next;
+            }
+        }
+    }
+    return OK;
 }
 
 void *list_popFront(List *pl)
@@ -173,13 +192,11 @@ void *list_popFront(List *pl)
 void *list_popBack(List *pl)
 {
     void *pe = NULL;
-    NodeList *n = NULL;
-
-    if ((pl == NULL) || (clist_is_empty(pl) == TRUE))
+    NodeList *pn = NULL;
+    if ((pl == NULL) || (list_isEmpty(pl) == TRUE))
     {
         return NULL;
     }
-
     if (pl->last->next == pl->last)
     {
         pe = pl->last->data;
@@ -187,16 +204,32 @@ void *list_popBack(List *pl)
         pl->last = NULL;
         return pe;
     }
+    pn = pl->last;
+    while (pn->next != pl->last)
+    {
+        pn = pn->next;
+    }
+    pe = pl->last->data;
+    pn->next = pl->last->next;
+    free((void *)pl->last);
+    pl->last = pn;
+    return pe;
 }
 
 void list_free(List *pl)
 {
-    NodeList *current = pl->last->next;
+    NodeList *current;
     NodeList *next;
-
-    if (pl == NULL || pl->last == NULL)
+    if (pl == NULL)
         return;
+    if (pl->last == NULL)
+    {
+        free(pl);
+        return;
+    }
 
+    current = pl->last->next;
+    
     while (current != pl->last)
     {
         next = current->next;
@@ -236,8 +269,6 @@ int list_print(FILE *fp, const List *pl, P_ele_print f)
         return -1;
     }
 
-    total = fprintf(fp, "%i", list_size(pl));
-
     current = pl->last->next;
 
     do
@@ -246,6 +277,6 @@ int list_print(FILE *fp, const List *pl, P_ele_print f)
         total += fprintf(fp, " ");
         current = current->next;
     } while (current != pl->last->next);
-
+    fprintf(fp, "\n");
     return total;
 }

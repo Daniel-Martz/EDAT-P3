@@ -8,11 +8,6 @@
 
 #define BUFFER_SIZE 512
 
-//---------------------------------------------------------
-// functions to manage pointer types
-//---------------------------------------------------------
-
-// INT
 int *int_init(int a) {
   int *r = NULL;
 
@@ -46,7 +41,6 @@ void int_free(void *a) { free((int *)a); }
 
 int int_print(FILE *pf, const void *a) { return fprintf(pf, "%d", *(int *)a); }
 
-// CHAR
 char *char_init(char a) {
   char *r = NULL;
 
@@ -85,7 +79,6 @@ int char_print(FILE *pf, const void *a) {
   return fprintf(pf, "%c", *(char *)a);
 }
 
-// FLOAT
 float *float_init(float a) {
   float *r = NULL;
 
@@ -127,7 +120,7 @@ int float_print(FILE *pf, const void *a) {
   return fprintf(pf, "%f", *(float *)a);
 }
 
-//  String
+
 void *string_copy(const void *src) { return strdup(src); }
 
 int string_cmp(const void *c1, const void *c2) {
@@ -145,9 +138,6 @@ int string_print(FILE *pf, const void *src) {
   return fprintf(pf, "%s", (char *)src);
 }
 
-//---------------------------------------------------------
-//---------------- conversion functions -------------------
-//---------------------------------------------------------
 
 /**  Convert string to integer pointer
  *
@@ -218,10 +208,6 @@ void *str2float(const char *str) {
   return f;
 }
 
-//-----------------------------------------------------------
-//------- file functions utilities
-//-----------------------------------------------------------
-
 /* read line from file and strip newline */
 /* note it doesn't strip any additional whitespace */
 int read_line(FILE *fp, char *buffer) {
@@ -229,12 +215,11 @@ int read_line(FILE *fp, char *buffer) {
   if (fgets(buffer, BUFFER_SIZE, fp)) {
     len = strlen(buffer);
     if (buffer[len - 1] == '\n')
-      buffer[--len] = '\0'; // remove '\n' from end of buffer
+      buffer[--len] = '\0';
     if (buffer[len - 1] == '\r')
       buffer[--len] =
-          '\0'; // hopefully this handles '\r\n' for files created in Windows.
-    // printf("Buffer %d: --%s--\n", len - 1, buffer);
-    return len; // will return 0 for empty line
+          '\0';
+    return len;
   }
   return 0;
 }
